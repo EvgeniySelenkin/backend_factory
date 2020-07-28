@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace SelenkinEE
 {
@@ -22,7 +25,7 @@ namespace SelenkinEE
             Console.WriteLine($"Общий объем резервуаров: {totalVolume}");
             Console.WriteLine();
             Console.WriteLine("В какой коллекции вы хотите произвести поиск? (Заводы, Установки, Резервуары)");
-            M: string choise = Console.ReadLine().ToLower();
+        M: string choise = Console.ReadLine().ToLower();
             if (choise == "заводы")
             {
                 Console.WriteLine("Введите название завода");
@@ -49,6 +52,9 @@ namespace SelenkinEE
                 Console.WriteLine("Похоже вы ошиблись при вводе, введите снова");
                 goto M;
             }
+
+            Console.WriteLine("Выгружаем объекты в json файл");
+            SerializerToJSON(factories, units, tanks);
 
         }
 
@@ -118,6 +124,16 @@ namespace SelenkinEE
                 if (tanks[i].Name == name)
                     tank = tanks[i];
             return tank;
+        }
+
+        public static void SerializerToJSON(Factory[] factories, Unit[] units, Tank[] tanks)
+        {
+            
+            var factory = JsonConvert.SerializeObject(factories);
+            var unit = JsonConvert.SerializeObject(units);
+            var tank = JsonConvert.SerializeObject(tanks);
+            File.WriteAllText("object.json", "Factories: " + factory + "\nUnits: " + unit + "\nTanks: " + tank);
+            Console.WriteLine("Данные загружены");
         }
     }
 
