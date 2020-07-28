@@ -11,15 +11,45 @@ namespace SelenkinEE
             var factories = GetFactories();
             Console.WriteLine($"Количество резервуаров {tanks.Length}");
 
-            for(int i=0;i<tanks.Length;i++)
+            for (int i = 0; i < tanks.Length; i++)
             {
                 tanks[i].GetInformation();
                 Console.WriteLine($"{tanks[i].Name} принадлежит установке {units[tanks[i].UnitId - 1].Name} и заводу {factories[units[tanks[i].UnitId - 1].FactoryId - 1].Name}");
                 Console.WriteLine();
             }
-           
+
             var totalVolume = GetTotalVolume(tanks);
             Console.WriteLine($"Общий объем резервуаров: {totalVolume}");
+            Console.WriteLine();
+            Console.WriteLine("В какой коллекции вы хотите произвести поиск? (Заводы, Установки, Резервуары)");
+            M: string choise = Console.ReadLine().ToLower();
+            if (choise == "заводы")
+            {
+                Console.WriteLine("Введите название завода");
+                var Name = Console.ReadLine();
+                Console.WriteLine("Информация по данному заводу");
+                FindFactory(factories, Name).GetInformation();
+            }
+            else if (choise == "установки")
+            {
+                Console.WriteLine("Введите название установки");
+                var Name = Console.ReadLine();
+                Console.WriteLine("Информация по данной установке");
+                Console.WriteLine("Установка " + FindUnit(units, Name).Name + " находится на заводе " + factories[units[FindUnit(units, Name).Id - 1].FactoryId - 1].Name);
+            }
+            else if (choise == "резервуары")
+            {
+                Console.WriteLine("Введите название резервуара");
+                var Name = Console.ReadLine();
+                Console.WriteLine("Информация по данному резервуару");
+                FindTank(tanks, Name).GetInformation();
+            }
+            else
+            {
+                Console.WriteLine("Похоже вы ошиблись при вводе, введите снова");
+                goto M;
+            }
+
         }
 
         //возврат массива резервуаров
@@ -61,6 +91,33 @@ namespace SelenkinEE
             for (int i = 0; i < tanks.Length; i++)
                 totalVolume += tanks[i].Volume;
             return totalVolume;
+        }
+
+        public static Factory FindFactory(Factory[] factories, string name)
+        {
+            var factory = new Factory();
+            for (int i = 0; i < factories.Length; i++)
+                if (factories[i].Name == name)
+                    factory = factories[i];
+            return factory;
+        }
+
+        public static Unit FindUnit(Unit[] units, string name)
+        {
+            var unit = new Unit();
+            for (int i = 0; i < units.Length; i++)
+                if (units[i].Name == name)
+                    unit = units[i];
+            return unit;
+        }
+
+        public static Tank FindTank(Tank[] tanks, string name)
+        {
+            var tank = new Tank();
+            for (int i = 0; i < tanks.Length; i++)
+                if (tanks[i].Name == name)
+                    tank = tanks[i];
+            return tank;
         }
     }
 

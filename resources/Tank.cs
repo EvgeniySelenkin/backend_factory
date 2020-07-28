@@ -6,6 +6,10 @@
     public int MaxVolume;
     public int UnitId;
 
+    public Tank()
+    {
+
+    }
     public Tank(int id, string name, int volume, int maxVolume, int unitId)
     {
         Id = id;

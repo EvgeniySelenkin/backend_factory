@@ -4,6 +4,10 @@
     public string Name;
     public int FactoryId;
 
+    public Unit()
+    {
+
+    }
     public Unit(int id, string name, int factoryId)
     {
         Id = id;
