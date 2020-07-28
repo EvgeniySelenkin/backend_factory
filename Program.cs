@@ -182,7 +182,8 @@ namespace SelenkinEE
             var factory = JsonConvert.SerializeObject(factories);
             var unit = JsonConvert.SerializeObject(units);
             var tank = JsonConvert.SerializeObject(tanks);
-            File.WriteAllText("object.json", "Factories: " + factory + "\nUnits: " + unit + "\nTanks: " + tank);
+            string result = "Factories: " + factory + " Units: " + unit + " Tanks: " + tank;
+            File.WriteAllText("object.json", JsonConvert.SerializeObject(result));
             Console.WriteLine("Данные загружены");
         }
     }
