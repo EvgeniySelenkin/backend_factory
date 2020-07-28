@@ -2,6 +2,8 @@
 using System.IO;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using NPOI.XSSF.UserModel;
+using NPOI.SS.UserModel;
 
 namespace SelenkinEE
 {
@@ -38,7 +40,7 @@ namespace SelenkinEE
                 Console.WriteLine("Введите название установки");
                 var Name = Console.ReadLine();
                 Console.WriteLine("Информация по данной установке");
-                Console.WriteLine("Установка " + FindUnit(units, Name).Name + " находится на заводе " + factories[units[FindUnit(units, Name).Id - 1].FactoryId - 1].Name);
+                Console.WriteLine("Установка " + FindUnit(units, Name).Name + " находится на заводе " + factories[FindUnit(units, Name).FactoryId - 1].Name);
             }
             else if (choise == "резервуары")
             {
@@ -62,22 +64,56 @@ namespace SelenkinEE
         public static Tank[] GetTanks()
         {
             var tanks = new Tank[6];
+            FileStream fs = new FileStream("Таблица_резервуаров.xlsx", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            XSSFWorkbook workbook = new XSSFWorkbook(fs);
+            XSSFSheet sheet = (XSSFSheet)workbook.GetSheetAt(2);
+
+            for(int i = 1;i<7;i++)
+            {
+                ICell cell1 = sheet.GetRow(i).GetCell(0);
+                cell1.SetCellType(CellType.Numeric);
+                ICell cell2 = sheet.GetRow(i).GetCell(1);
+                cell2.SetCellType(CellType.String);
+                ICell cell3 = sheet.GetRow(i).GetCell(2);
+                cell3.SetCellType(CellType.Numeric);
+                ICell cell4 = sheet.GetRow(i).GetCell(3);
+                cell4.SetCellType(CellType.Numeric);
+                ICell cell5 = sheet.GetRow(i).GetCell(4);
+                cell5.SetCellType(CellType.Numeric);
+                tanks[i-1] = new Tank((int)cell1.NumericCellValue, cell2.StringCellValue, (int)cell3.NumericCellValue, (int)cell4.NumericCellValue, (int)cell5.NumericCellValue);
+            }
+            /*
             tanks[0] = new Tank(1, "Резервуар 1", 1500, 2000, 1);
             tanks[1] = new Tank(2, "Резервуар 2", 2500, 3000, 1);
             tanks[2] = new Tank(3, "Дополнительный резервуар 24", 3000, 3000, 2);
             tanks[3] = new Tank(4, "Резервуар 35", 3000, 3000, 2);
             tanks[4] = new Tank(5, "Резервуар 47", 4000, 5000, 2);
-            tanks[5] = new Tank(6, "Резервуар 256", 500, 500, 3);
+            tanks[5] = new Tank(6, "Резервуар 256", 500, 500, 3);*/
             return tanks;
         }
 
         //возврат массива установок
         public static Unit[] GetUnits()
         {
+            FileStream fs = new FileStream("Таблица_резервуаров.xlsx", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            XSSFWorkbook workbook = new XSSFWorkbook(fs);
+            XSSFSheet sheet = (XSSFSheet)workbook.GetSheetAt(1);
             var units = new Unit[3];
-            units[0] = new Unit(1, "ГФУ-1", 1);
+            for (int i = 1; i < 4; i++)
+            {
+                ICell cell1 = sheet.GetRow(i).GetCell(0);
+                cell1.SetCellType(CellType.Numeric);
+                ICell cell2 = sheet.GetRow(i).GetCell(1);
+                cell2.SetCellType(CellType.String);
+                ICell cell3 = sheet.GetRow(i).GetCell(2);
+                cell3.SetCellType(CellType.Numeric);
+                units[i - 1] = new Unit((int)cell1.NumericCellValue, cell2.StringCellValue, (int)cell3.NumericCellValue);
+            }
+
+            /*units[0] = new Unit(1, "ГФУ-1", 1);
             units[1] = new Unit(2, "ГФУ-2", 1);
-            units[2] = new Unit(3, "АВТ-6", 2);
+            units[2] = new Unit(3, "АВТ-6", 2);*/
+
             return units;
         }
 
@@ -85,8 +121,22 @@ namespace SelenkinEE
         public static Factory[] GetFactories()
         {
             var factories = new Factory[2];
-            factories[0] = new Factory(1, "МНПЗ", "Московский нефтеперерабатывающий завод");
-            factories[1] = new Factory(2, "ОНПЗ", "Омский нефтеперерабатывающий завод");
+            FileStream fs = new FileStream("Таблица_резервуаров.xlsx", FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            XSSFWorkbook workbook = new XSSFWorkbook(fs);
+            XSSFSheet sheet = (XSSFSheet)workbook.GetSheetAt(0);
+            for (int i = 1; i < 3; i++)
+            {
+                ICell cell1 = sheet.GetRow(i).GetCell(0);
+                cell1.SetCellType(CellType.Numeric);
+                ICell cell2 = sheet.GetRow(i).GetCell(1);
+                cell2.SetCellType(CellType.String);
+                ICell cell3 = sheet.GetRow(i).GetCell(2);
+                cell3.SetCellType(CellType.String);
+                factories[i - 1] = new Factory((int)cell1.NumericCellValue, cell2.StringCellValue, cell3.StringCellValue);
+            }
+            /*factories[0] = new Factory(1, "МНПЗ", "Московский нефтеперерабатывающий завод");
+            factories[1] = new Factory(2, "ОНПЗ", "Омский нефтеперерабатывающий завод");*/
+
             return factories;
         }
 
