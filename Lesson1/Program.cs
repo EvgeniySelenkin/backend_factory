@@ -1,11 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using NPOI.XSSF.UserModel;
 using NPOI.SS.UserModel;
 
-namespace SelenkinEE
+namespace Lesson1
 {
     class Program
     {
@@ -28,7 +27,7 @@ namespace SelenkinEE
             Console.WriteLine();
             Console.WriteLine("В какой коллекции вы хотите произвести поиск? (Заводы, Установки, Резервуары)");
             string choise = Console.ReadLine().ToLower();
-            while(choise!= "заводы" || choise!= "установки" || choise!= "резервуары")
+            while (choise != "заводы" || choise != "установки" || choise != "резервуары")
             {
                 Console.WriteLine("Похоже вы ошиблись при вводе, введите снова");
                 choise = Console.ReadLine().ToLower();
@@ -68,7 +67,7 @@ namespace SelenkinEE
             XSSFWorkbook workbook = new XSSFWorkbook(fs);
             XSSFSheet sheet = (XSSFSheet)workbook.GetSheetAt(2);
 
-            for(int i = 1;i<7;i++)
+            for (int i = 1; i < 7; i++)
             {
                 ICell tankIdCell = sheet.GetRow(i).GetCell(0);
                 tankIdCell.SetCellType(CellType.Numeric);
@@ -80,7 +79,7 @@ namespace SelenkinEE
                 tankMaxVolumeCell.SetCellType(CellType.Numeric);
                 ICell tankUnitIdCell = sheet.GetRow(i).GetCell(4);
                 tankUnitIdCell.SetCellType(CellType.Numeric);
-                tanks[i-1] = new Tank((int)tankIdCell.NumericCellValue, tankNameCell.StringCellValue, (int)tankVolumeCell.NumericCellValue, (int)tankMaxVolumeCell.NumericCellValue, (int)tankUnitIdCell.NumericCellValue);
+                tanks[i - 1] = new Tank((int)tankIdCell.NumericCellValue, tankNameCell.StringCellValue, (int)tankVolumeCell.NumericCellValue, (int)tankMaxVolumeCell.NumericCellValue, (int)tankUnitIdCell.NumericCellValue);
             }
             /*
             tanks[0] = new Tank(1, "Резервуар 1", 1500, 2000, 1);
@@ -155,6 +154,7 @@ namespace SelenkinEE
             for (int i = 0; i < factories.Length; i++)
                 if (factories[i].Name == name)
                     return factories[i];
+            return null;
         }
 
         public static Unit FindUnit(Unit[] units, string name)
@@ -163,6 +163,7 @@ namespace SelenkinEE
             for (int i = 0; i < units.Length; i++)
                 if (units[i].Name == name)
                     return units[i];
+            return null;
         }
 
         public static Tank FindTank(Tank[] tanks, string name)
@@ -171,11 +172,12 @@ namespace SelenkinEE
             for (int i = 0; i < tanks.Length; i++)
                 if (tanks[i].Name == name)
                     return tanks[i];
+            return null;
         }
 
         public static void SerializerToJSON(Factory[] factories, Unit[] units, Tank[] tanks)
         {
-            
+
             var factory = JsonConvert.SerializeObject(factories);
             var unit = JsonConvert.SerializeObject(units);
             var tank = JsonConvert.SerializeObject(tanks);
