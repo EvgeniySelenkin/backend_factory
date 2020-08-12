@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Lesson1
 {
     interface IDataService
     {
-        IList<Unit> GetUnits();
-        Unit FindUnitByTank(Tank tank);
-        Factory FindFactoryByUnit(Unit unit);
-        Unit FindUnitByName(string unitName);
+        Task<IList<Unit>> GetUnits();
+        Task<Unit> FindUnitByTank(Tank tank);
+        Task<Factory> FindFactoryByUnit(Unit unit);
+        Task<Unit> FindUnitByName(string unitName);
 
     }
 }

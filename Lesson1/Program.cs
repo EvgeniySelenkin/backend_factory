@@ -16,14 +16,14 @@ namespace Lesson1
 
             // Инициализация сервиса для работы с данными.
             var dataService = new DataService();
-
+            var dataServiceSql = new DataServiceSql();
             //инициализация сервиса для ввода/вывода
             var ioService = new IOService();
 
             var factoriesFromExcel = dataService.GetFactoriesFromExcel().ToList();
 
             var factories = dataService.GetFactories().ToList();
-            var units = dataService.GetUnits().ToList();
+            var units = dataServiceSql.GetUnits().Result;
             var tanks = dataService.GetTanks().ToList();
             
             ioService.Output($"Количество резервуаров {tanks.Count()}");
@@ -31,8 +31,8 @@ namespace Lesson1
             {
                 try
                 {
-                    var unit = dataService.FindUnitByTank(tank, units);
-                    var factory = dataService.FindFactoryByUnit(unit, factories);
+                    var unit = dataServiceSql.FindUnitByTank(tank).Result;
+                    var factory = dataServiceSql.FindFactoryByUnit(unit).Result;
                     ioService.Output($"{tank.Name} принадлежит установке {unit.Name} и заводу {factory.Name}");
                 }
                 catch(Exception e)
@@ -60,7 +60,7 @@ namespace Lesson1
                         break;
                     case ConsoleKey.D2: 
                     case ConsoleKey.NumPad2:
-                        FindFactoryByName(dataService, factories, ioService);
+                        FindUnitByName(dataServiceSql, ioService);//Переделан на SQL
                         break;
                     case ConsoleKey.D3: 
                     case ConsoleKey.NumPad3:
@@ -178,14 +178,14 @@ namespace Lesson1
                 ioService.Exeption(e);
             } 
         }
-
-        private static void FindUnitByName(DataService dataService, IEnumerable<Unit> units, IOService ioService)
+        //Переделан на SQL
+        private static void FindUnitByName(DataServiceSql dataServiceSql, IOService ioService)
         {
             ioService.Notify += DisplayMessage;
             var unitName = ioService.InputForFindSth("установки", ioService);
             try
             {
-                var unit = dataService.FindUnitByName(unitName, units);
+                var unit = dataServiceSql.FindUnitByName(unitName).Result;
                 if (unit != null)
                 {
                     ioService.Output($"Установка {unit.Name} найдена с индексом {unit.Id}");
