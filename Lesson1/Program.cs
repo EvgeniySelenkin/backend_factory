@@ -68,19 +68,19 @@ namespace Lesson1
                         break;
                     case ConsoleKey.D4:
                     case ConsoleKey.NumPad4:
-                        SerializeToJsonForMenu(factories, units, tanks, ioService);
+                        Task.Run(async () => await dataServiceSql.CreateUnit()).Wait();
                         break;
                     case ConsoleKey.D5:
                     case ConsoleKey.NumPad5:
-                        ACDjson(ioService);
+                         dataServiceSql.ReadUnit();
                         break;
                     case ConsoleKey.D6: 
                     case ConsoleKey.NumPad6:
-                        Task.Run(async () => await ReadJsonAsync(ioService)).Wait();
+                        Task.Run(async () => await dataServiceSql.UpdateUnit()).Wait();
                         break;
                     case ConsoleKey.D7:
                     case ConsoleKey.NumPad7:
-                        FindTankByNameLinqQueryForMenu(ioService, dataService, tanks);
+                        Task.Run(async () => await dataServiceSql.DeleteUnit()).Wait();
                         break;
                     case ConsoleKey.D8: 
                     case ConsoleKey.NumPad8:

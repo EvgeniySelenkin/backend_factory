@@ -43,10 +43,10 @@ namespace Lesson1
             Console.WriteLine("Чтобы осуществить поиск по имени завода нажмите 1");
             Console.WriteLine("Чтобы осуществить поиск по имени установки нажмите 2");
             Console.WriteLine("Чтобы осуществить поиск по имени резервуара нажмите 3");
-            Console.WriteLine("Чтобы создать файл .json и серелиазовать данные заводов нажмите 4");
-            Console.WriteLine("Чтобы создать файл .json и производить с ним изменения нажмите 5");
-            Console.WriteLine("Чтобы асинхронно считать данные из файла Async.json нажмите 6");
-            Console.WriteLine("Чтобы осуществить поиск по имени резервуара с помощью LINQ (Query syntax) нажмите 7");
+            Console.WriteLine("Чтобы добавить новую установку в БД нажмите 4");
+            Console.WriteLine("Чтобы вывести установку из БД нажмите 5");
+            Console.WriteLine("Чтобы изменить установку в БД нажмите 6");
+            Console.WriteLine("Чтобы удалить установку нажмите 7");
             Console.WriteLine("Чтобы осуществить поиск по имени резервуара с помощью LINQ (Method-based syntax) нажмите 8");
             Console.WriteLine("Для выхода нажмите любую другую клавишу");
             Console.WriteLine();
