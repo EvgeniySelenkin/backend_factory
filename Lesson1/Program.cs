@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using NPOI.OpenXmlFormats;
 
 namespace Lesson1
 {
@@ -40,6 +41,10 @@ namespace Lesson1
                     ioService.Exeption(e);
                 }
             }
+
+            //проверка валидации резервуаров
+            bool tankIsValid = ValidateTank(tanks[0]);
+            ioService.Output($"Результат валидации {tanks[0].Name}: {tankIsValid}");
 
             var totalVolume = dataService.GetTotalVolume(tanks);
             ioService.Output($"Общий объем резервуаров: {totalVolume}");
@@ -330,6 +335,18 @@ namespace Lesson1
             var result = await Task.Run(()=> File.ReadAllTextAsync(path));
             ioService.Output("Файл считался. Содержимое: ");
             ioService.Output(result);
+        }
+
+        public static bool ValidateTank(Tank tank)
+        {
+            Type t = typeof(Tank);
+            var attrs = t.GetCustomAttributes(false);
+            foreach (AllowedRangeAttribute attr in attrs)
+            {
+                if (tank.Volume >= attr.minValue && tank.Volume <= attr.maxValue && tank.Volume <= tank.MaxVolume) return true;
+                else return false;
+            }
+            return true;
         }
     }
 

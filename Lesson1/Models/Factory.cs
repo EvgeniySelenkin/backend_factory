@@ -2,8 +2,11 @@
 {
     public class Factory : IGetInfo
     {
+        [CustomDescription("Id Завода")]
         public int Id { get; set; }
+        [CustomDescription("Название завода")]
         public string Name { get; set; }
+        [CustomDescription("Описание завода")]
         public string Description { get; set; }
 
         public Factory()

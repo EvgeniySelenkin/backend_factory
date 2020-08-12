@@ -2,10 +2,17 @@
 {
     public class Tank : IGetInfo
     {
+        
         public int Id { get; set; }
+        [CustomDescription("Название резервуара")]
         public string Name { get; set; }
+        [CustomDescription("Заполненная емкость резервуара")]
+        [AllowedRange(0, 1000)]
         public int Volume { get; set; }
+        [CustomDescription("Максимальная емкость резервуара")]
+        [AllowedRange(200, 1000)]
         public int MaxVolume { get; set; }
+        [CustomDescription("Id установки резервуара")]
         public int UnitId { get; set; }
 
         public Tank()
