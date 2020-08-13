@@ -340,11 +340,11 @@ namespace Lesson1
         public static bool ValidateTank(Tank tank)
         {
             Type t = typeof(Tank);
-            var attrs = t.GetCustomAttributes(false);
+            var fi = t.GetProperty("Volume");
+            var attrs = fi.GetCustomAttributes(typeof(AllowedRangeAttribute),false);
             foreach (AllowedRangeAttribute attr in attrs)
             {
-                if (tank.Volume >= attr.minValue && tank.Volume <= attr.maxValue && tank.Volume <= tank.MaxVolume) return true;
-                else return false;
+                return tank.Volume >= attr.minValue && tank.Volume <= attr.maxValue && tank.Volume <= tank.MaxVolume;
             }
             return true;
         }
