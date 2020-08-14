@@ -2,8 +2,11 @@
 {
     public class Unit : IGetInfo
     {
+        [CustomDescription("Id установки")]
         public int Id { get; set; }
+        [CustomDescription("Название установки")]
         public string Name { get; set; }
+        [CustomDescription("Id завода установки")]
         public int FactoryId { get; set; }
 
         public Unit()

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using NPOI.OpenXmlFormats;
 
 namespace Lesson1
 {
@@ -16,14 +17,14 @@ namespace Lesson1
 
             // Инициализация сервиса для работы с данными.
             var dataService = new DataService();
-
+            var dataServiceSql = new DataServiceSql();
             //инициализация сервиса для ввода/вывода
             var ioService = new IOService();
 
             var factoriesFromExcel = dataService.GetFactoriesFromExcel().ToList();
 
             var factories = dataService.GetFactories().ToList();
-            var units = dataService.GetUnits().ToList();
+            var units = dataServiceSql.GetUnits().Result;
             var tanks = dataService.GetTanks().ToList();
             
             ioService.Output($"Количество резервуаров {tanks.Count()}");
@@ -31,8 +32,8 @@ namespace Lesson1
             {
                 try
                 {
-                    var unit = dataService.FindUnitByTank(tank, units);
-                    var factory = dataService.FindFactoryByUnit(unit, factories);
+                    var unit = dataServiceSql.FindUnitByTank(tank).Result;
+                    var factory = dataServiceSql.FindFactoryByUnit(unit).Result;
                     ioService.Output($"{tank.Name} принадлежит установке {unit.Name} и заводу {factory.Name}");
                 }
                 catch(Exception e)
@@ -40,6 +41,10 @@ namespace Lesson1
                     ioService.Exeption(e);
                 }
             }
+
+            //проверка валидации резервуаров
+            bool tankIsValid = ValidateTank(tanks[0]);
+            ioService.Output($"Результат валидации {tanks[0].Name}: {tankIsValid}");
 
             var totalVolume = dataService.GetTotalVolume(tanks);
             ioService.Output($"Общий объем резервуаров: {totalVolume}");
@@ -60,7 +65,7 @@ namespace Lesson1
                         break;
                     case ConsoleKey.D2: 
                     case ConsoleKey.NumPad2:
-                        FindFactoryByName(dataService, factories, ioService);
+                        FindUnitByName(dataServiceSql, ioService);//Переделан на SQL
                         break;
                     case ConsoleKey.D3: 
                     case ConsoleKey.NumPad3:
@@ -68,19 +73,19 @@ namespace Lesson1
                         break;
                     case ConsoleKey.D4:
                     case ConsoleKey.NumPad4:
-                        SerializeToJsonForMenu(factories, units, tanks, ioService);
+                        Task.Run(async () => await dataServiceSql.CreateUnit()).Wait();
                         break;
                     case ConsoleKey.D5:
                     case ConsoleKey.NumPad5:
-                        ACDjson(ioService);
+                         dataServiceSql.ReadUnit();
                         break;
                     case ConsoleKey.D6: 
                     case ConsoleKey.NumPad6:
-                        Task.Run(async () => await ReadJsonAsync(ioService)).Wait();
+                        Task.Run(async () => await dataServiceSql.UpdateUnit()).Wait();
                         break;
                     case ConsoleKey.D7:
                     case ConsoleKey.NumPad7:
-                        FindTankByNameLinqQueryForMenu(ioService, dataService, tanks);
+                        Task.Run(async () => await dataServiceSql.DeleteUnit()).Wait();
                         break;
                     case ConsoleKey.D8: 
                     case ConsoleKey.NumPad8:
@@ -178,14 +183,14 @@ namespace Lesson1
                 ioService.Exeption(e);
             } 
         }
-
-        private static void FindUnitByName(DataService dataService, IEnumerable<Unit> units, IOService ioService)
+        //Переделан на SQL
+        private static void FindUnitByName(DataServiceSql dataServiceSql, IOService ioService)
         {
             ioService.Notify += DisplayMessage;
             var unitName = ioService.InputForFindSth("установки", ioService);
             try
             {
-                var unit = dataService.FindUnitByName(unitName, units);
+                var unit = dataServiceSql.FindUnitByName(unitName).Result;
                 if (unit != null)
                 {
                     ioService.Output($"Установка {unit.Name} найдена с индексом {unit.Id}");
@@ -330,6 +335,18 @@ namespace Lesson1
             var result = await Task.Run(()=> File.ReadAllTextAsync(path));
             ioService.Output("Файл считался. Содержимое: ");
             ioService.Output(result);
+        }
+
+        public static bool ValidateTank(Tank tank)
+        {
+            Type t = typeof(Tank);
+            var fi = t.GetProperty("Volume");
+            var attrs = fi.GetCustomAttributes(typeof(AllowedRangeAttribute),false);
+            foreach (AllowedRangeAttribute attr in attrs)
+            {
+                return tank.Volume >= attr.minValue && tank.Volume <= attr.maxValue && tank.Volume <= tank.MaxVolume;
+            }
+            return true;
         }
     }
 
