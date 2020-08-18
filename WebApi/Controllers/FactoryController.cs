@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace WebApi
 {
@@ -28,9 +29,13 @@ namespace WebApi
 
         // GET api/factories/5
         [HttpGet("api/factories/{id}")]
-        public async Task<Factory> GetFactoryById(int id)
+        public FactoryOdt GetFactoryById(int id)
         {
-            return await repo.GetId(id);
+            var factory = repo.GetId(id).Result;
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Factory, FactoryOdt>());
+            var mapper = new Mapper(config);
+            var odt = mapper.Map<FactoryOdt>(factory);
+            return odt;
         }
 
         [HttpPost("api/factories")]

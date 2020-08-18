@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebApi
@@ -21,7 +19,7 @@ namespace WebApi
 
         public async Task<Factory> GetId(int id)
         {
-            return await db.Factory./*Include(f => f.Units).*/FirstOrDefaultAsync(f => f.Id == id);
+            return await db.Factory.Include(f => f.Units).FirstOrDefaultAsync(f => f.Id == id);
         }
 
         public async Task Post(Factory factory)

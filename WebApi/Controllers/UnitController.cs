@@ -12,26 +12,43 @@ namespace WebApi.Controllers
     [ApiController]
     public class UnitController : ControllerBase
     {
-        private readonly DBContext context;
-        public UnitController(DBContext context)
+        private readonly UnitRepository repo;
+        public UnitController(UnitRepository repo)
         {
-            this.context = context;
+            this.repo = repo;
         }
 
         // GET: api/units
         [HttpGet("api/units")]
-        public IEnumerable<Unit> GetUnits()
+        public async Task<IEnumerable<Unit>> GetUnits()
         {
-            return context.Unit.ToList();
+            var units = await repo.GetAll();
+            return units;
         }
 
         // GET api/units/5
         [HttpGet("api/units/{id}")]
-        public async Task<IList<Unit>> GetUnitById(int id)
+        public async Task<Unit> GetUnitById(int id)
         {
-            return await context.Unit
-                .Where(x => x.Id == id)
-                .ToListAsync();
+            return await repo.GetId(id);
+        }
+
+        [HttpPost("api/units")]
+        public async Task PostUnit(Unit unit)
+        {
+            await repo.Post(unit);
+        }
+
+        [HttpDelete("api/units/{id}")]
+        public async Task DeleteUnit(int id)
+        {
+            await repo.Delete(id);
+        }
+
+        [HttpPut("api/units")]
+        public async Task UpdateUnit(Unit unit)
+        {
+            await repo.Update(unit);
         }
     }
 }

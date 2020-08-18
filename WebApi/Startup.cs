@@ -28,6 +28,8 @@ namespace WebApi
         {
             services.AddDbContext<DBContext>(option => option.UseSqlServer(@"Data Source=LAPTOP-8TVASHA4;Initial Catalog=Factories;Integrated Security=True"));
             services.AddScoped<FactoryRepository>();
+            services.AddScoped<UnitRepository>();
+            services.AddScoped<TankRepository>();
             services.AddControllers();
         }
 

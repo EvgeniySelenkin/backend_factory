@@ -14,28 +14,43 @@ namespace WebApi.Controllers
     [ApiController]
     public class TankController : ControllerBase
     {
-        private readonly DBContext context;
-
-        public TankController(DBContext context)
+        private readonly TankRepository repo;
+        public TankController(TankRepository repo)
         {
-            this.context = context;
+            this.repo = repo;
         }
 
         // GET: api/tanks
         [HttpGet("api/tanks")]
-        public IEnumerable<Tank> GetTanks()
+        public async Task<IEnumerable<Tank>> GetTanks()
         {
-            var tanks = context.Tank.ToList();
+            var tanks = await repo.GetAll();
             return tanks;
         }
 
         // GET api/tanks/5
         [HttpGet("api/tanks/{id}")]
-        public async Task<IList<Tank>> GetTankById(int id)
+        public async Task<Tank> GetTankById(int id)
         {
-            return await context.Tank
-                .Where(x => x.Id == id)
-                .ToListAsync();
+            return await repo.GetId(id);
+        }
+
+        [HttpPost("api/tanks")]
+        public async Task PosTank(Tank tank)
+        {
+            await repo.Post(tank);
+        }
+
+        [HttpDelete("api/tanks/{id}")]
+        public async Task DeleteTank(int id)
+        {
+            await repo.Delete(id);
+        }
+
+        [HttpPut("api/tanks")]
+        public async Task UpdateFactory(Tank tank)
+        {
+            await repo.Update(tank);
         }
 
 
