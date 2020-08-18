@@ -21,10 +21,21 @@ namespace WebApi
 
         // GET: api/factories
         [HttpGet("api/factories")]
-        public async Task<IEnumerable<Factory>> GetFactories()
+        public IEnumerable<FactoryOdt> GetFactories()
         {
-            var factories = await repo.GetAll();
-            return factories;
+            var factories = repo.GetAll().Result;
+            var ods = new List<FactoryOdt>();
+            foreach(Factory factory in factories)
+            {
+                var config = new MapperConfiguration(cfg => cfg.CreateMap<Factory, FactoryOdt>().ForMember("Units", opt => opt.Ignore()));
+                var mapper = new Mapper(config);
+                var odt = mapper.Map<Factory, FactoryOdt>(factory);
+                var configUnit = new MapperConfiguration(cfg => cfg.CreateMap<Unit, UnitListOdt>());
+                var mapperUnit = new Mapper(configUnit);
+                odt.Units = mapperUnit.Map<ICollection<Unit>, ICollection<UnitListOdt>>(factory.Units);
+                ods.Add(odt);
+            }
+            return ods;
         }
 
         // GET api/factories/5

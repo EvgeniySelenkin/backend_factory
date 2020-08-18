@@ -14,7 +14,7 @@ namespace WebApi
 
         public async Task<IEnumerable<Factory>> GetAll()
         {
-            return await db.Factory./*Include(f => f.Units).*/ToListAsync();
+            return await db.Factory.Include(f => f.Units).ToListAsync();
         }
 
         public async Task<Factory> GetId(int id)
