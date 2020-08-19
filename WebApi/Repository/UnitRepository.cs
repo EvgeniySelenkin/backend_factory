@@ -14,12 +14,12 @@ namespace WebApi
 
         public async Task<IEnumerable<Unit>> GetAll()
         {
-            return await db.Unit.ToListAsync();
+            return await db.Unit.Include(u => u.Factory).Include(u => u.Tanks).ToListAsync();
         }
 
         public async Task<Unit> GetId(int id)
         {
-            return await db.Unit.FirstOrDefaultAsync(u => u.Id == id);
+            return await db.Unit.Include(u => u.Factory).Include(u => u.Tanks).FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task Post(Unit unit)

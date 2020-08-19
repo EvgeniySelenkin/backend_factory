@@ -7,6 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebApi.Odt;
 
 namespace WebApi.Controllers
 {
@@ -22,17 +23,35 @@ namespace WebApi.Controllers
 
         // GET: api/tanks
         [HttpGet("api/tanks")]
-        public async Task<IEnumerable<Tank>> GetTanks()
+        public IEnumerable<TankOdt> GetTanks()
         {
-            var tanks = await repo.GetAll();
-            return tanks;
+            var tanks = repo.GetAll().Result;
+            var ods = new List<TankOdt>();
+            foreach(Tank tank in tanks)
+            {
+                var config = new MapperConfiguration(cfg => cfg.CreateMap<Tank, TankOdt>().ForMember("Unit", opt => opt.Ignore()));
+                var mapper = new Mapper(config);
+                var odt = mapper.Map<TankOdt>(tank);
+                var configUnit = new MapperConfiguration(cfg => cfg.CreateMap<Unit, UnitListOdt>());
+                var mapperUnit = new Mapper(configUnit);
+                odt.Unit = mapperUnit.Map<UnitListOdt>(tank.Unit);
+                ods.Add(odt);
+            }
+            return ods;
         }
 
         // GET api/tanks/5
         [HttpGet("api/tanks/{id}")]
-        public async Task<Tank> GetTankById(int id)
+        public  TankOdt GetTankById(int id)
         {
-            return await repo.GetId(id);
+            var tank = repo.GetId(id).Result;
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Tank, TankOdt>().ForMember("Unit", opt => opt.Ignore()));
+            var mapper = new Mapper(config);
+            var odt = mapper.Map<TankOdt>(tank);
+            var configUnit = new MapperConfiguration(cfg => cfg.CreateMap<Unit, UnitListOdt>());
+            var mapperUnit = new Mapper(configUnit);
+            odt.Unit = mapperUnit.Map<UnitListOdt>(tank.Unit);
+            return odt;
         }
 
         [HttpPost("api/tanks")]
