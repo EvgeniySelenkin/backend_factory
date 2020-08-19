@@ -27,10 +27,13 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DBContext>(option => option.UseSqlServer(@"Data Source=LAPTOP-8TVASHA4;Initial Catalog=Factories;Integrated Security=True"));
+            
             services.AddScoped<FactoryRepository>();
             services.AddScoped<UnitRepository>();
             services.AddScoped<TankRepository>();
+            
             services.AddControllers();
+            services.AddHostedService<BackgroundService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
