@@ -11,7 +11,7 @@ namespace WebApi
     public class BackgroundService : IHostedService
     {
         private readonly Logger _logger;
-        private IServiceProvider services;
+        private readonly IServiceProvider services;
         private Timer _timer;
 
         public BackgroundService(IServiceProvider services)
@@ -23,7 +23,7 @@ namespace WebApi
         public Task StartAsync(CancellationToken stoppingToken)
         {
             _logger.Info("Timed Hosted Service running.");
-            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(10000));
+            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 
             return Task.CompletedTask;
         }
@@ -37,7 +37,7 @@ namespace WebApi
                 Random rnd = new Random();
                 foreach (var tank in tanks)
                 {
-                    tank.Volume = tank.Volume * (1 + rnd.Next(-10, 10) / 100);
+                    tank.Volume = tank.Volume * rnd.Next(9, 11) / 10;
                     if (tank.Volume > tank.MaxVolume)
                     {
                         _logger.Info($"Превышение объема резервуара {tank.Name}.");
