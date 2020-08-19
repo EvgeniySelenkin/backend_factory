@@ -12,6 +12,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
     <PackageReference Include="NLog" Version="4.7.3" />
+    <PackageReference Include="NLog.config" Version="4.7.3" />
   </ItemGroup>
 
 
