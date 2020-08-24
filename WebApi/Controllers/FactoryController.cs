@@ -14,9 +14,11 @@ namespace WebApi
     public class FactoryController : ControllerBase
     {
         private readonly FactoryRepository repo;
-        public FactoryController(FactoryRepository repo)
+        private readonly IMapper mapper;
+        public FactoryController(FactoryRepository repo, IMapper mapper)
         {
             this.repo = repo;
+            this.mapper = mapper;
         }
 
         // GET: api/factories
@@ -27,12 +29,8 @@ namespace WebApi
             var ods = new List<FactoryOdt>();
             foreach(Factory factory in factories)
             {
-                var config = new MapperConfiguration(cfg => cfg.CreateMap<Factory, FactoryOdt>().ForMember("Units", opt => opt.Ignore()));
-                var mapper = new Mapper(config);
                 var odt = mapper.Map<Factory, FactoryOdt>(factory);
-                var configUnit = new MapperConfiguration(cfg => cfg.CreateMap<Unit, UnitListOdt>());
-                var mapperUnit = new Mapper(configUnit);
-                odt.Units = mapperUnit.Map<ICollection<Unit>, ICollection<UnitListOdt>>(factory.Units);
+                odt.Units = mapper.Map<ICollection<Unit>, ICollection<UnitListOdt>>(factory.Units);
                 ods.Add(odt);
             }
             return ods;
@@ -43,12 +41,8 @@ namespace WebApi
         public FactoryOdt GetFactoryById(int id)
         {
             var factory = repo.GetId(id).Result;
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Factory, FactoryOdt>().ForMember("Units", opt => opt.Ignore()));
-            var mapper = new Mapper(config);
             var odt = mapper.Map<Factory, FactoryOdt>(factory);
-            var configUnit = new MapperConfiguration(cfg => cfg.CreateMap<Unit, UnitListOdt>());
-            var mapperUnit = new Mapper(configUnit);
-            odt.Units = mapperUnit.Map<ICollection<Unit>, ICollection<UnitListOdt>>(factory.Units);
+            odt.Units = mapper.Map<ICollection<Unit>, ICollection<UnitListOdt>>(factory.Units);
             return odt;
         }
 

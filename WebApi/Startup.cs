@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
 
 namespace WebApi
 {
@@ -31,7 +32,7 @@ namespace WebApi
             services.AddScoped<FactoryRepository>();
             services.AddScoped<UnitRepository>();
             services.AddScoped<TankRepository>();
-            
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
             services.AddHostedService<BackgroundService>();
         }

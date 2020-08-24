@@ -16,9 +16,11 @@ namespace WebApi.Controllers
     public class TankController : ControllerBase
     {
         private readonly TankRepository repo;
-        public TankController(TankRepository repo)
+        private readonly IMapper mapper;
+        public TankController(TankRepository repo, IMapper mapper)
         {
             this.repo = repo;
+            this.mapper = mapper;
         }
 
         // GET: api/tanks
@@ -29,12 +31,8 @@ namespace WebApi.Controllers
             var ods = new List<TankOdt>();
             foreach(Tank tank in tanks)
             {
-                var config = new MapperConfiguration(cfg => cfg.CreateMap<Tank, TankOdt>().ForMember("Unit", opt => opt.Ignore()));
-                var mapper = new Mapper(config);
                 var odt = mapper.Map<TankOdt>(tank);
-                var configUnit = new MapperConfiguration(cfg => cfg.CreateMap<Unit, UnitListOdt>());
-                var mapperUnit = new Mapper(configUnit);
-                odt.Unit = mapperUnit.Map<UnitListOdt>(tank.Unit);
+                odt.Unit = mapper.Map<UnitListOdt>(tank.Unit);
                 ods.Add(odt);
             }
             return ods;
@@ -45,12 +43,8 @@ namespace WebApi.Controllers
         public  TankOdt GetTankById(int id)
         {
             var tank = repo.GetId(id).Result;
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<Tank, TankOdt>().ForMember("Unit", opt => opt.Ignore()));
-            var mapper = new Mapper(config);
             var odt = mapper.Map<TankOdt>(tank);
-            var configUnit = new MapperConfiguration(cfg => cfg.CreateMap<Unit, UnitListOdt>());
-            var mapperUnit = new Mapper(configUnit);
-            odt.Unit = mapperUnit.Map<UnitListOdt>(tank.Unit);
+            odt.Unit = mapper.Map<UnitListOdt>(tank.Unit);
             return odt;
         }
 
