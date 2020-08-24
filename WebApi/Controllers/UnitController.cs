@@ -50,9 +50,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("api/units")]
-        public async Task PostUnit(Unit unit)
+        public void PostUnit(Unit unit)
         {
-            await repo.Post(unit);
+            repo.Post(unit);
         }
 
         [HttpDelete("api/units/{id}")]

@@ -49,9 +49,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("api/tanks")]
-        public async Task PosTank(Tank tank)
+        public void PostTank(Tank tank)
         {
-            await repo.Post(tank);
+            repo.Post(tank);
         }
 
         [HttpDelete("api/tanks/{id}")]

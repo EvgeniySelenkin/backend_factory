@@ -23,10 +23,10 @@ namespace WebApi
             return await db.Factory.Include(f => f.Units).FirstOrDefaultAsync(f => f.Id == id);
         }
 
-        public async Task Post(Factory factory)
+        public void Post(Factory factory)
         {
-            await db.AddAsync(factory);
-            await db.SaveChangesAsync();
+            db.Add(factory);
+            db.SaveChanges();
         }
 
         public async Task Delete(int id)

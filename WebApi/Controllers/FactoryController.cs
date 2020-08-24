@@ -47,9 +47,9 @@ namespace WebApi
         }
 
         [HttpPost("api/factories")]
-        public async Task PostFactory(Factory factory)
+        public void PostFactory(Factory factory)
         {
-            await repo.Post(factory);
+            repo.Post(factory);
         }
 
         [HttpDelete("api/factories/{id}")]

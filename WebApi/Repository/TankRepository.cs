@@ -24,10 +24,10 @@ namespace WebApi
             return await db.Tank.Include(t => t.Unit).FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public async Task Post(Tank tank)
+        public void Post(Tank tank)
         {
-            await db.AddAsync(tank);
-            await db.SaveChangesAsync();
+            db.Add(tank);
+            db.SaveChanges();
         }
 
         public async Task Delete(int id)
