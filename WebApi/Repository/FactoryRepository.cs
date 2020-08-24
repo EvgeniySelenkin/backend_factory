@@ -33,13 +33,17 @@ namespace WebApi
         {
             try
             {
-                var factory = db.Factory./*Include(f => f.Units).*/FirstOrDefaultAsync(f => f.Id == id);
-                db.Remove(factory.Result);
+                var factory = await db.Factory./*Include(f => f.Units).*/FirstOrDefaultAsync(f => f.Id == id);
+                db.Remove(factory);
                 await db.SaveChangesAsync();
             }
-            catch(Exception e)
+            catch (ArgumentNullException ex)
             {
-                throw new Exception("400 Невозможно удалить завод", e);
+                throw new Exception("404 Завод не найден.", ex);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("400 Невозможно удалить завод, содержащий установки.", e);
             }
             
             
@@ -47,8 +51,15 @@ namespace WebApi
 
         public async Task Update(Factory factory)
         {
-            db.Update(factory);
-            await db.SaveChangesAsync();
+            try
+            {
+                db.Update(factory);
+                await db.SaveChangesAsync();
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception("404 Завод не найден.", ex);
+            }
         }
     }
 }

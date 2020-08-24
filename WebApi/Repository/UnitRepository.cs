@@ -37,7 +37,11 @@ namespace WebApi
                 db.Remove(unit.Result);
                 await db.SaveChangesAsync();
             }
-            catch(Exception e)
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception("404 Установка не найден.", ex);
+            }
+            catch (Exception e)
             {
                 throw new Exception("400 Невозможно удалить установку", e);
             }
@@ -46,8 +50,15 @@ namespace WebApi
 
         public async Task Update(Unit unit)
         {
-            db.Update(unit);
-            await db.SaveChangesAsync();
+            try
+            {
+                db.Update(unit);
+                await db.SaveChangesAsync();
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception("404 Установка не найден.", ex);
+            }
         }
     }
 }

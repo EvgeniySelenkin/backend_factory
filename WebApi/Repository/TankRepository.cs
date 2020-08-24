@@ -34,11 +34,15 @@ namespace WebApi
         {
             try
             {
-                var tank = db.Tank.FirstOrDefaultAsync(t => t.Id == id);
-                db.Remove(tank.Result);
+                var tank = await db.Tank.FirstOrDefaultAsync(t => t.Id == id);
+                db.Remove(tank);
                 await db.SaveChangesAsync();
             }
-            catch(Exception e)
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception("404 Резервуар не найден.", ex);
+            }
+            catch (Exception e)
             {
                 throw new Exception("400 Невозможно удалить резервуар", e);
             }
@@ -47,8 +51,15 @@ namespace WebApi
 
         public async Task Update(Tank tank)
         {
-            db.Update(tank);
-            await db.SaveChangesAsync();
+            try
+            {
+                db.Update(tank);
+                await db.SaveChangesAsync();
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception("404 Резервуар не найден.", ex);
+            }
         }
 
     }
