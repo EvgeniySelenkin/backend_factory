@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -30,9 +31,18 @@ namespace WebApi
 
         public async Task Delete(int id)
         {
-            var factory = db.Factory./*Include(f => f.Units).*/FirstOrDefaultAsync(f => f.Id == id);
-            db.Remove(factory.Result);
-            await db.SaveChangesAsync();
+            try
+            {
+                var factory = db.Factory./*Include(f => f.Units).*/FirstOrDefaultAsync(f => f.Id == id);
+                db.Remove(factory.Result);
+                await db.SaveChangesAsync();
+            }
+            catch(Exception e)
+            {
+                throw new Exception("400 Невозможно удалить завод", e);
+            }
+            
+            
         }
 
         public async Task Update(Factory factory)

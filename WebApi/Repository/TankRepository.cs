@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace WebApi
@@ -31,9 +32,17 @@ namespace WebApi
 
         public async Task Delete(int id)
         {
-            var tank = db.Tank.FirstOrDefaultAsync(t => t.Id == id);
-            db.Remove(tank.Result);
-            await db.SaveChangesAsync();
+            try
+            {
+                var tank = db.Tank.FirstOrDefaultAsync(t => t.Id == id);
+                db.Remove(tank.Result);
+                await db.SaveChangesAsync();
+            }
+            catch(Exception e)
+            {
+                throw new Exception("400 Невозможно удалить резервуар", e);
+            }
+            
         }
 
         public async Task Update(Tank tank)
