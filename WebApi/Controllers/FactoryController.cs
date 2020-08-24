@@ -23,9 +23,9 @@ namespace WebApi
 
         // GET: api/factories
         [HttpGet("api/factories")]
-        public IEnumerable<FactoryOdt> GetFactories()
+        public async Task<IEnumerable<FactoryOdt>> GetFactories()
         {
-            var factories = repo.GetAll().Result;
+            var factories = await repo.GetAll();
             var ods = new List<FactoryOdt>();
             foreach(Factory factory in factories)
             {
@@ -38,9 +38,9 @@ namespace WebApi
 
         // GET api/factories/5
         [HttpGet("api/factories/{id}")]
-        public FactoryOdt GetFactoryById(int id)
+        public async Task<FactoryOdt> GetFactoryById(int id)
         {
-            var factory = repo.GetId(id).Result;
+            var factory = await repo.GetId(id);
             var odt = mapper.Map<Factory, FactoryOdt>(factory);
             odt.Units = mapper.Map<ICollection<Unit>, ICollection<UnitListOdt>>(factory.Units);
             return odt;

@@ -24,9 +24,9 @@ namespace WebApi.Controllers
 
         // GET: api/units
         [HttpGet("api/units")]
-        public IEnumerable<UnitOdt> GetUnits()
+        public async Task<IEnumerable<UnitOdt>> GetUnits()
         {
-            var units = repo.GetAll().Result;
+            var units = await repo.GetAll();
             var ods = new List<UnitOdt>();
             foreach(var unit in units)
             {
@@ -40,9 +40,9 @@ namespace WebApi.Controllers
 
         // GET api/units/5
         [HttpGet("api/units/{id}")]
-        public UnitOdt GetUnitById(int id)
+        public async Task<UnitOdt> GetUnitById(int id)
         {
-            var unit = repo.GetId(id).Result;
+            var unit = await repo.GetId(id);
             var odt = mapper.Map<UnitOdt>(unit);
             odt.Factory = mapper.Map<FactoryForUnitOdt>(unit.Factory);
             odt.Tanks = mapper.Map<ICollection<TankListOdt>>(unit.Tanks);

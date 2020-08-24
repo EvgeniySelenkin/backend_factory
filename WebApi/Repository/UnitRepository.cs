@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace WebApi
 {
@@ -30,9 +31,17 @@ namespace WebApi
 
         public async Task Delete(int id)
         {
-            var unit = db.Unit.FirstOrDefaultAsync(u => u.Id == id);
-            db.Remove(unit.Result);
-            await db.SaveChangesAsync();
+            try
+            {
+                var unit = db.Unit.FirstOrDefaultAsync(u => u.Id == id);
+                db.Remove(unit.Result);
+                await db.SaveChangesAsync();
+            }
+            catch(Exception e)
+            {
+                throw new Exception("400 Невозможно удалить установку", e);
+            }
+            
         }
 
         public async Task Update(Unit unit)
