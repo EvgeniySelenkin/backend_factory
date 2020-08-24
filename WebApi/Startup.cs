@@ -27,7 +27,7 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DBContext>(option => option.UseSqlServer(@"Data Source=LAPTOP-8TVASHA4;Initial Catalog=Factories;Integrated Security=True"));
+            services.AddDbContext<DBContext>(option => option.UseSqlServer(Configuration.GetConnectionString("DataConnection")));
             
             services.AddScoped<FactoryRepository>();
             services.AddScoped<UnitRepository>();
