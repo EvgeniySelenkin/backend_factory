@@ -30,7 +30,7 @@ namespace WebApi
             foreach(Factory factory in factories)
             {
                 var odt = mapper.Map<Factory, FactoryOdt>(factory);
-                odt.Units = mapper.Map<ICollection<Unit>, ICollection<UnitListOdt>>(factory.Units);
+                //odt.Units = mapper.Map<ICollection<Unit>, ICollection<UnitListOdt>>(factory.Units);
                 ods.Add(odt);
             }
             return ods;

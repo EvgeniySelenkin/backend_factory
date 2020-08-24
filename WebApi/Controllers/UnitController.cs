@@ -31,8 +31,8 @@ namespace WebApi.Controllers
             foreach(var unit in units)
             {
                 var odt = mapper.Map<UnitOdt>(unit);
-                odt.Factory = mapper.Map<FactoryForUnitOdt>(unit.Factory);
-                odt.Tanks = mapper.Map<ICollection<TankListOdt>>(unit.Tanks);
+                //odt.Factory = mapper.Map<FactoryForUnitOdt>(unit.Factory);
+                //odt.Tanks = mapper.Map<ICollection<TankListOdt>>(unit.Tanks);
                 ods.Add(odt);
             }
             return ods;

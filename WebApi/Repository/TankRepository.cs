@@ -16,7 +16,7 @@ namespace WebApi
 
         public async Task<IEnumerable<Tank>> GetAll()
         {
-            return await db.Tank.Include(t => t.Unit).ToListAsync();
+            return await db.Tank./*Include(t => t.Unit).*/ToListAsync();
         }
 
         public async Task<Tank> GetId(int id)

@@ -32,7 +32,7 @@ namespace WebApi.Controllers
             foreach(Tank tank in tanks)
             {
                 var odt = mapper.Map<TankOdt>(tank);
-                odt.Unit = mapper.Map<UnitListOdt>(tank.Unit);
+                //odt.Unit = mapper.Map<UnitListOdt>(tank.Unit);
                 ods.Add(odt);
             }
             return ods;
