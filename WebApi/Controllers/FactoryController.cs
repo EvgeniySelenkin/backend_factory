@@ -23,7 +23,7 @@ namespace WebApi
         }
 
         // GET: api/factories
-        [Authorize(Roles = "admin")]
+        [Authorize]
         [HttpGet("api/factories")]
         public async Task<IEnumerable<FactoryOdt>> GetFactories()
         {
@@ -48,7 +48,7 @@ namespace WebApi
             odt.Units = mapper.Map<ICollection<Unit>, ICollection<UnitListOdt>>(factory.Units);
             return odt;
         }
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpPost("api/factories")]
         public void PostFactory(Factory factory)
         {
@@ -60,7 +60,7 @@ namespace WebApi
         {
             await repo.Delete(id);
         }
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpPut("api/factories")]
         public async Task UpdateFactory(Factory factory)
         {

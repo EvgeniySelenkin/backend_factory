@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ namespace WebApi.Controllers
             this.repo = repo;
             this.mapper = mapper;
         }
-
+        [Authorize]
         // GET: api/units
         [HttpGet("api/units")]
         public async Task<IEnumerable<UnitOdt>> GetUnits()
@@ -37,7 +38,7 @@ namespace WebApi.Controllers
             }
             return ods;
         }
-
+        [Authorize]
         // GET api/units/5
         [HttpGet("api/units/{id}")]
         public async Task<UnitOdt> GetUnitById(int id)
@@ -48,19 +49,19 @@ namespace WebApi.Controllers
             odt.Tanks = mapper.Map<ICollection<TankListOdt>>(unit.Tanks);
             return odt;
         }
-
+        [Authorize(Roles = "admin")]
         [HttpPost("api/units")]
         public void PostUnit(Unit unit)
         {
             repo.Post(unit);
         }
-
+        [Authorize(Roles = "admin")]
         [HttpDelete("api/units/{id}")]
         public async Task DeleteUnit(int id)
         {
             await repo.Delete(id);
         }
-
+        [Authorize(Roles = "admin")]
         [HttpPut("api/units")]
         public async Task UpdateUnit(Unit unit)
         {
