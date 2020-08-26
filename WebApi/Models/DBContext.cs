@@ -10,6 +10,7 @@ namespace WebApi
         public DbSet<Unit> Unit { get; set; }
         public DbSet<Tank> Tank { get; set; }
         public DbSet<Person> Person { get; set; }
+        public DbSet<Event> Event { get; set; }
 
         public DBContext(DbContextOptions options) : base(options)
         {

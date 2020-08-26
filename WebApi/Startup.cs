@@ -15,6 +15,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using WebApi.Authorization;
+using WebApi.BackgroundServices;
 
 namespace WebApi
 {
@@ -63,6 +64,7 @@ namespace WebApi
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
             services.AddHostedService<BackgroundService>();
+            services.AddHostedService<EventBackgroundService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
