@@ -12,6 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using WebApi.Authorization;
 
 namespace WebApi
 {
@@ -28,7 +31,32 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DBContext>(option => option.UseSqlServer(Configuration.GetConnectionString("DataConnection")));
-            
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.RequireHttpsMetadata = false;
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            // укзывает, будет ли валидироваться издатель при валидации токена
+                            ValidateIssuer = true,
+                            // строка, представляющая издателя
+                            ValidIssuer = AuthOptions.ISSUER,
+
+                            // будет ли валидироваться потребитель токена
+                            ValidateAudience = true,
+                            // установка потребителя токена
+                            ValidAudience = AuthOptions.AUDIENCE,
+                            // будет ли валидироваться время существования
+                            ValidateLifetime = true,
+
+                            // установка ключа безопасности
+                            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                            // валидация ключа безопасности
+                            ValidateIssuerSigningKey = true,
+                        };
+                    });
+
             services.AddScoped<FactoryRepository>();
             services.AddScoped<UnitRepository>();
             services.AddScoped<TankRepository>();
@@ -49,6 +77,7 @@ namespace WebApi
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi
 {
@@ -22,6 +23,7 @@ namespace WebApi
         }
 
         // GET: api/factories
+        [Authorize(Roles = "admin")]
         [HttpGet("api/factories")]
         public async Task<IEnumerable<FactoryOdt>> GetFactories()
         {
@@ -37,6 +39,7 @@ namespace WebApi
         }
 
         // GET api/factories/5
+        [Authorize]
         [HttpGet("api/factories/{id}")]
         public async Task<FactoryOdt> GetFactoryById(int id)
         {
@@ -45,19 +48,19 @@ namespace WebApi
             odt.Units = mapper.Map<ICollection<Unit>, ICollection<UnitListOdt>>(factory.Units);
             return odt;
         }
-
+        [Authorize]
         [HttpPost("api/factories")]
         public void PostFactory(Factory factory)
         {
             repo.Post(factory);
         }
-
+        [Authorize(Roles ="admin")]
         [HttpDelete("api/factories/{id}")]
         public async Task DeleteFactory(int id)
         {
             await repo.Delete(id);
         }
-
+        [Authorize]
         [HttpPut("api/factories")]
         public async Task UpdateFactory(Factory factory)
         {

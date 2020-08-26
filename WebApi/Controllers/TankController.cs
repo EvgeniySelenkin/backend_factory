@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,7 @@ namespace WebApi.Controllers
             this.repo = repo;
             this.mapper = mapper;
         }
-
+        [Authorize]
         // GET: api/tanks
         [HttpGet("api/tanks")]
         public async Task<IEnumerable<TankOdt>> GetTanks()
@@ -37,7 +38,7 @@ namespace WebApi.Controllers
             }
             return ods;
         }
-
+        [Authorize]
         // GET api/tanks/5
         [HttpGet("api/tanks/{id}")]
         public async Task<TankOdt> GetTankById(int id)
@@ -47,19 +48,19 @@ namespace WebApi.Controllers
             odt.Unit = mapper.Map<UnitListOdt>(tank.Unit);
             return odt;
         }
-
+        [Authorize(Roles = "admin")]
         [HttpPost("api/tanks")]
         public void PostTank(Tank tank)
         {
             repo.Post(tank);
         }
-
+        [Authorize(Roles = "admin")]
         [HttpDelete("api/tanks/{id}")]
         public async Task DeleteTank(int id)
         {
             await repo.Delete(id);
         }
-
+        [Authorize(Roles = "admin")]
         [HttpPut("api/tanks")]
         public async Task UpdateFactory(Tank tank)
         {
