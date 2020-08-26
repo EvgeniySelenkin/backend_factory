@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lesson1", "Lesson1\Lesson1.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET", "NET\NET.csproj", "{4E61DB21-5DD2-4EFE-B33E-6BE7ECC3CAFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{46C078A7-9220-4BEC-B490-628D53A72FCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{46C078A7-9220-4BEC-B490-628D53A72FCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mock", "Mock\Mock.csproj", "{F96DF337-2B86-428C-9EAF-B5DBF85C766F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{46C078A7-9220-4BEC-B490-628D53A72FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46C078A7-9220-4BEC-B490-628D53A72FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46C078A7-9220-4BEC-B490-628D53A72FCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F96DF337-2B86-428C-9EAF-B5DBF85C766F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F96DF337-2B86-428C-9EAF-B5DBF85C766F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F96DF337-2B86-428C-9EAF-B5DBF85C766F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F96DF337-2B86-428C-9EAF-B5DBF85C766F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
