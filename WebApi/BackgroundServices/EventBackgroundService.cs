@@ -48,7 +48,7 @@ namespace WebApi.BackgroundServices
                 foreach (var id in unitsId)
                 {
                     int skip = 0;
-                    int take = 50;
+                    int take = 10000;
                     var EventsId = new List<int>();
                     var Events = new List<Event>();
                     do
@@ -68,8 +68,8 @@ namespace WebApi.BackgroundServices
                         Events.AddRange(JsonSerializer.Deserialize<List<Event>>(jsonString));
 
 
-                        skip += 50;
-                    } while (take == EventsId.Count);
+                        skip += 10000;
+                    } while (skip == EventsId.Count);
 
                     foreach (var elem in Events)
                     {
