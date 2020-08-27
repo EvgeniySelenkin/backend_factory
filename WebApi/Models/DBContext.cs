@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApi.Models;
+using WebApi.Odt;
 using WebApi.Services;
 
 namespace WebApi
@@ -10,7 +11,7 @@ namespace WebApi
         public DbSet<Unit> Unit { get; set; }
         public DbSet<Tank> Tank { get; set; }
         public DbSet<Person> Person { get; set; }
-        public DbSet<Event> Event { get; set; }
+        public DbSet<EventOdt> Event { get; set; }
 
         public DBContext(DbContextOptions options) : base(options)
         {

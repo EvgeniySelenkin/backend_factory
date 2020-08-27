@@ -11,6 +11,11 @@ using System.Text.Json;
 using WebApi.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
+using System.Text.Json.Serialization;
+using System.Text;
+using WebApi.Odt;
+using System.Diagnostics.Eventing.Reader;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.BackgroundServices
 {
@@ -48,59 +53,52 @@ namespace WebApi.BackgroundServices
                     var Events = new List<Event>();
                     do
                     {
-                        /*HttpResponseMessage response = await client.GetAsync(url);
+                        var url = "http://localhost:5000/api/events/keys" + "?" + $"unitId={id}&take={take}&skip={skip}";
+                        HttpResponseMessage response = await client.GetAsync(url);
                         response.EnsureSuccessStatusCode();
                         string responseBody = await response.Content.ReadAsStringAsync();
-                        EventsId.AddRange(JsonSerializer.Deserialize<List<int>>(responseBody));*/
+                        EventsId.AddRange(JsonSerializer.Deserialize<List<int>>(responseBody));
 
-                        var url = "http://localhost:5001/api/events/keys" + "?" + $"unitId={id}&take={take}&skip={skip}";
-                        WebRequest request = WebRequest.Create(url);
-                        request.AuthenticationLevel = 0;
-                        WebResponse response = await request.GetResponseAsync();
-
-                        using (var dataStream = response.GetResponseStream())
-                        {
-                            StreamReader reader = new StreamReader(dataStream);
-                            var jsonString = reader.ReadToEnd();
-                            EventsId.AddRange(JsonSerializer.Deserialize<List<int>>(jsonString));
-                        }
-
-                        WebRequest requestPost = WebRequest.Create(@"http://localhost:5001/api/events}");
-                        WebResponse responsePost = await requestPost.GetResponseAsync();
-                        requestPost.Method = "POST";
                         string Id = JsonSerializer.Serialize(EventsId);
-                        byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(Id);
-                        requestPost.ContentType = "application/json";
-                        requestPost.ContentLength = byteArray.Length;
-                        using (Stream dataStream1 = requestPost.GetRequestStream())
-                        {
-                            dataStream1.Write(byteArray, 0, byteArray.Length);
+                        var content = new StringContent(Id, Encoding.UTF8, "application/json") /*new FormUrlEncodedContent(new[] { new KeyValuePair < string, string > ("", Id) })*/;
+                        url = "http://localhost:5000/api/events";
+                        var result = await client.PostAsync(url, content);
+                        var jsonString = await result.Content.ReadAsStringAsync();
 
-                        }
-                        using (Stream stream = responsePost.GetResponseStream())
-                        {
-                            using (StreamReader reader = new StreamReader(stream))
-                            {
-                                var jsonString = reader.ReadToEnd();
-                                Events.AddRange(JsonSerializer.Deserialize<List<Event>>(jsonString));
-                            }
-                        }
+                        Events.AddRange(JsonSerializer.Deserialize<List<Event>>(jsonString));
+
+
                         skip += 50;
                     } while (take == EventsId.Count);
 
                     foreach (var elem in Events)
                     {
-                        var findEvent = db.Event.FirstOrDefault(x => x.Name == elem.Name);
+                        var elemOdt = new EventOdt()
+                        {
+                            IsActive = elem.IsActive,
+                            StorageValue = elem.StorageValue,
+                            Name = elem.Name,
+                            UnitId = elem.UnitId,
+                            Description = elem.Description,
+                            Latitude = elem.Latitude,
+                            Longituted = elem.Longituted,
+                            Tags = JsonSerializer.Serialize(elem.Tags),
+                            ResponsibleOperators = JsonSerializer.Serialize(elem.ResponsibleOperators)
+
+                        };
+                        
+                        var findEvent = db.Event.FirstOrDefault(x => x.Name == elemOdt.Name);
                         if (findEvent == null)
                         {
-                            db.Event.Add(elem);
-                            db.SaveChangesAsync();
+                            db.Event.Add(elemOdt);
+                            db.SaveChanges();
                         }
                         else if (elem.IsActive)
                         {
-                            db.Event.Update(elem);
-                            db.SaveChangesAsync();
+                            db.Event.Update(elemOdt);
+                            db.SaveChanges();
                         }
+                
                     }
                 }
             }

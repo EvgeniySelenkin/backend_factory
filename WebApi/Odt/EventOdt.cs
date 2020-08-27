@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace WebApi.Models
+namespace WebApi.Odt
 {
-    public class Event
+    public class EventOdt
     {
         public int Id { get; set; }
         public bool IsActive { get; set; }
@@ -16,7 +15,7 @@ namespace WebApi.Models
         public string Description { get; set; }
         public double Latitude { get; set; }
         public double Longituted { get; set; }
-        public List<string> Tags { get; set; }
-        public List<Operator> ResponsibleOperators { get; set; }
+        public string Tags { get; set; }
+        public string ResponsibleOperators { get; set; }
     }
 }

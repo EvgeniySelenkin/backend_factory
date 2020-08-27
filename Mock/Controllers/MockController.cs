@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,14 +39,14 @@ namespace Mock.Controllers
         }
 
         [HttpPost("api/events")]
-        public IList<Event> GetEvents(List<int> ListId)
+        public string GetEvents(List<int> ListId)
         {
             var result = new List<Event>();
             foreach (var elem in ListId)
             {
                 result.Add(ListEvents.FirstOrDefault(x => x.Id == elem));
             }
-            return result;
+            return JsonSerializer.Serialize(result);
         }
     }
 }
