@@ -58,12 +58,20 @@ namespace WebApi
         [HttpDelete("api/factories/{id}")]
         public async Task DeleteFactory(int id)
         {
+            var factory = await GetFactoryById(id);
+            if (factory == null)
+                NotFound();
+            if (factory.Units.Count != 0)
+                BadRequest("Завод содержит установки, не может быть удален");
             await repo.Delete(id);
         }
         [Authorize(Roles = "admin")]
         [HttpPut("api/factories")]
         public async Task UpdateFactory(Factory factory)
         {
+            var Factory = await GetFactoryById(factory.Id);
+            if (Factory == null)
+                NotFound();
             await repo.Update(factory);
         }
     }

@@ -31,34 +31,16 @@ namespace WebApi
 
         public async Task Delete(int id)
         {
-            try
-            {
-                var unit = db.Unit.FirstOrDefaultAsync(u => u.Id == id);
-                db.Remove(unit.Result);
-                await db.SaveChangesAsync();
-            }
-            catch (ArgumentNullException ex)
-            {
-                throw new Exception("404 Установка не найден.", ex);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("400 Невозможно удалить установку", e);
-            }
+            var unit = db.Unit.FirstOrDefaultAsync(u => u.Id == id);
+            db.Remove(unit.Result);
+            await db.SaveChangesAsync();
             
         }
 
         public async Task Update(Unit unit)
         {
-            try
-            {
-                db.Update(unit);
-                await db.SaveChangesAsync();
-            }
-            catch (ArgumentNullException ex)
-            {
-                throw new Exception("404 Установка не найден.", ex);
-            }
+            db.Update(unit);
+            await db.SaveChangesAsync();
         }
     }
 }

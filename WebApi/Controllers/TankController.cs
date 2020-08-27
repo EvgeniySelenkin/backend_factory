@@ -58,12 +58,18 @@ namespace WebApi.Controllers
         [HttpDelete("api/tanks/{id}")]
         public async Task DeleteTank(int id)
         {
+            var tank = await GetTankById(id);
+            if (tank == null)
+                NotFound();
             await repo.Delete(id);
         }
         [Authorize(Roles = "admin")]
         [HttpPut("api/tanks")]
         public async Task UpdateFactory(Tank tank)
         {
+            var Tank = await GetTankById(tank.Id);
+            if (Tank == null)
+                NotFound();
             await repo.Update(tank);
         }
 

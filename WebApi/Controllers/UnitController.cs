@@ -59,12 +59,20 @@ namespace WebApi.Controllers
         [HttpDelete("api/units/{id}")]
         public async Task DeleteUnit(int id)
         {
+            var unit = await GetUnitById(id);
+            if (unit == null)
+                NotFound();
+            if (unit.Tanks.Count != 0)
+                BadRequest("Установка содержит резервуары, не может быть удалена");
             await repo.Delete(id);
         }
         [Authorize(Roles = "admin")]
         [HttpPut("api/units")]
         public async Task UpdateUnit(Unit unit)
         {
+            var Unit = await GetUnitById(unit.Id);
+            if (Unit == null)
+                NotFound();
             await repo.Update(unit);
         }
     }

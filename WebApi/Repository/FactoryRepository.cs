@@ -31,35 +31,17 @@ namespace WebApi
 
         public async Task Delete(int id)
         {
-            try
-            {
-                var factory = await db.Factory./*Include(f => f.Units).*/FirstOrDefaultAsync(f => f.Id == id);
-                db.Remove(factory);
-                await db.SaveChangesAsync();
-            }
-            catch (ArgumentNullException ex)
-            {
-                throw new Exception("404 Завод не найден.", ex);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("400 Невозможно удалить завод, содержащий установки.", e);
-            }
+            var factory = await db.Factory./*Include(f => f.Units).*/FirstOrDefaultAsync(f => f.Id == id);
+            db.Remove(factory);
+            await db.SaveChangesAsync();
             
             
         }
 
         public async Task Update(Factory factory)
         {
-            try
-            {
-                db.Update(factory);
-                await db.SaveChangesAsync();
-            }
-            catch (ArgumentNullException ex)
-            {
-                throw new Exception("404 Завод не найден.", ex);
-            }
+            db.Update(factory);
+            await db.SaveChangesAsync();
         }
     }
 }
