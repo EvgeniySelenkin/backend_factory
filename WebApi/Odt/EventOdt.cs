@@ -8,6 +8,7 @@ namespace WebApi.Odt
     public class EventOdt
     {
         public int Id { get; set; }
+        public int EventId { get; set; }
         public bool IsActive { get; set; }
         public double StorageValue { get; set; }
         public string Name { get; set; }

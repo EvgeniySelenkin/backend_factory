@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
@@ -18,5 +19,16 @@ namespace WebApi.Models
         public double Longituted { get; set; }
         public List<string> Tags { get; set; }
         public List<Operator> ResponsibleOperators { get; set; }
+
+        public string SerializeTags()
+        {
+            return JsonSerializer.Serialize(Tags);
+        }
+
+        public string SerializeOperators()
+        {
+            return JsonSerializer.Serialize(ResponsibleOperators);
+        }
+
     }
 }

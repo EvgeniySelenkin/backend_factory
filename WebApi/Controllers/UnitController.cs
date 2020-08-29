@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using WebApi.Odt;
+using System.Configuration;
 
 namespace WebApi.Controllers
 {
@@ -17,10 +19,12 @@ namespace WebApi.Controllers
     {
         private readonly UnitRepository repo;
         private readonly IMapper mapper;
-        public UnitController(UnitRepository repo, IMapper mapper)
+        private IConfiguration configuration;
+        public UnitController(UnitRepository repo, IMapper mapper, IConfiguration configuration)
         {
             this.repo = repo;
             this.mapper = mapper;
+            this.configuration = configuration;
         }
         [Authorize]
         // GET: api/units
@@ -74,6 +78,12 @@ namespace WebApi.Controllers
             if (Unit == null)
                 NotFound();
             await repo.Update(unit);
+        }
+        //изменение appsettings.json (передача массива в виде Json)
+        [HttpPost("api/units/track")]
+        public async void TrackedUnit(List<int> unitsId)
+        {
+            
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -16,35 +17,31 @@ namespace Mock.Controllers
     [ApiController]
     public class MockController : ControllerBase
     {
-        public List<Event> ListEvents { get; set; }
-        public MockController()
+        private ImportJson import { get; set; }
+        public MockController(ImportJson import)
         {
-            var dirInfo = new DirectoryInfo(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)).Parent?.Parent?.Parent;
-            var pathFile = Path.Combine(dirInfo.FullName, "events.json");
-            var Js = new JsonSer();
-            ListEvents = Js.Deserialize(pathFile);
+            this.import = import;
         }
 
         [HttpGet("api/events/keys")]
         public IList<int> GetEventsId(int unitId, int take, int skip)
         {
-            var ListEvent = ListEvents.Where(x => x.UnitId == unitId).Skip(skip).Take(take);
-            var ListId = new List<int>();
-            foreach(var elem in ListEvent)
+            var events = import.GetEvent().Where(x => x.UnitId == unitId).Skip(skip).Take(take).ToList();
+            var ids = new List<int>();
+            foreach(var elem in events)
             {
-                ListId.Add(elem.Id);
+                ids.Add(elem.Id);
             }
-            
-            return ListId;
+            return ids;
         }
 
         [HttpPost("api/events")]
-        public string GetEvents(List<int> ListId)
+        public string GetEvents(List<int> ids)
         {
             var result = new List<Event>();
-            foreach (var elem in ListId)
+            foreach (var elem in ids)
             {
-                result.Add(ListEvents.FirstOrDefault(x => x.Id == elem));
+                result.Add(import.GetEvent().FirstOrDefault(x => x.Id == elem));
             }
             return JsonSerializer.Serialize(result);
         }
