@@ -31,8 +31,8 @@ namespace WebApi
 
         public async Task Delete(int id)
         {
-            var unit = db.Unit.FirstOrDefaultAsync(u => u.Id == id);
-            db.Remove(unit.Result);
+            var unit = await db.Unit.FirstOrDefaultAsync(u => u.Id == id);
+            db.Remove(unit);
             await db.SaveChangesAsync();
             
         }

@@ -27,22 +27,14 @@ namespace Mock.Controllers
         public IList<int> GetEventsId(int unitId, int take, int skip)
         {
             var events = import.GetEvent().Where(x => x.UnitId == unitId).Skip(skip).Take(take).ToList();
-            var ids = new List<int>();
-            foreach(var elem in events)
-            {
-                ids.Add(elem.Id);
-            }
+            var ids = events.Select(u => u.Id).ToList();
             return ids;
         }
 
         [HttpPost("api/events")]
         public string GetEvents(List<int> ids)
         {
-            var result = new List<Event>();
-            foreach (var elem in ids)
-            {
-                result.Add(import.GetEvent().FirstOrDefault(x => x.Id == elem));
-            }
+            var result = import.GetEvent().Where(u => ids.Exists(y => y == u.Id));
             return JsonSerializer.Serialize(result);
         }
     }

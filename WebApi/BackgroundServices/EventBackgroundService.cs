@@ -64,13 +64,13 @@ namespace WebApi.BackgroundServices
                 foreach (var id in unitsId)
                 {
                     int skip = 0;
-                    int take = 1000;
+                    int take = JsonSerializer.Deserialize<int>(configuration["eventsChunkSize"]); //1000;
                     int count = 0;
                     do
                     {
                         var EventsId = new List<int>();
                         var Events = new List<Event>();
-                        var url = "http://localhost:5000/api/events/keys" + "?" + $"unitId={id}&take={take}&skip={skip}";
+                        var url = configuration["routeMock"] /*"http://localhost:5000/api/events/keys"*/ + $"api/events/keys?unitId={id}&take={take}&skip={skip}";
                         HttpResponseMessage response = await client.GetAsync(url);
                         response.EnsureSuccessStatusCode();
                         string responseBody = await response.Content.ReadAsStringAsync();

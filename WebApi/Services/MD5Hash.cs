@@ -34,14 +34,7 @@ namespace WebApi.Services
             MD5 md5Hash = MD5.Create();
             string hashOfInput = GetMd5Hash();
             StringComparer comparer = StringComparer.OrdinalIgnoreCase;
-            if (0 == comparer.Compare(hashOfInput, hash))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (0 == comparer.Compare(hashOfInput, hash));
         }
     }
 }

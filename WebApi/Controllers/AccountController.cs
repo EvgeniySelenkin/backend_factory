@@ -34,9 +34,9 @@ namespace WebApi.Controllers
         [HttpPost("api/user/auth")]
         public IActionResult Token(User user)
         {
-            var md5 = new MD5Hash(user.password);
+            var md5 = new MD5Hash(user.Password);
             var hashPassword = md5.GetMd5Hash();
-            var identity = GetIdentity(user.login, hashPassword);
+            var identity = GetIdentity(user.Login, hashPassword);
             if (identity == null)
             {
                 return BadRequest(new { errorText = "Invalid username or password." });
@@ -86,15 +86,15 @@ namespace WebApi.Controllers
         [HttpPost("api/user/password/update")]
         public IActionResult UpdatePassword(UserUpdatePassword user)
         {
-            var md5 = new MD5Hash(user.currentPassword);
+            var md5 = new MD5Hash(user.CurrentPassword);
             var hashPassword = md5.GetMd5Hash();
-            var identity = GetIdentity(user.login, hashPassword);
+            var identity = GetIdentity(user.Login, hashPassword);
             if (identity ==null)
                 return BadRequest(new { errorText = "Invalid username or password." });
 
-            md5 = new MD5Hash(user.newPassword);
+            md5 = new MD5Hash(user.NewPassword);
             var hashNewPassword = md5.GetMd5Hash();
-            Person person = context.Person.FirstOrDefault(x => x.Login == user.login);
+            Person person = context.Person.FirstOrDefault(x => x.Login == user.Login);
             person.hashPassword = hashNewPassword;
             context.Person.Update(person);
             context.SaveChangesAsync();

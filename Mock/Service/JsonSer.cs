@@ -11,6 +11,10 @@ namespace Mock.Service
     {
         public List<Event> Deserialize(string pathFile)
         {
+            if(!File.Exists(pathFile))
+            {
+                throw new Exception("Файл не найден");
+            }
             var jsonString = File.ReadAllText(pathFile);
             return JsonSerializer.Deserialize<List<Event>>(jsonString);
         }
