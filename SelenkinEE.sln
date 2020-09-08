@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NET", "NET\NET.csproj", "{4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{46C078A7-9220-4BEC-B490-628D53A72FCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mock", "Mock\Mock.csproj", "{F96DF337-2B86-428C-9EAF-B5DBF85C766F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mock", "Mock\Mock.csproj", "{F96DF337-2B86-428C-9EAF-B5DBF85C766F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfApp", "WpfApp\WpfApp.csproj", "{77C6C8FC-60E1-4084-AF7B-4C8D58C6280A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{F96DF337-2B86-428C-9EAF-B5DBF85C766F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F96DF337-2B86-428C-9EAF-B5DBF85C766F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F96DF337-2B86-428C-9EAF-B5DBF85C766F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77C6C8FC-60E1-4084-AF7B-4C8D58C6280A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C6C8FC-60E1-4084-AF7B-4C8D58C6280A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C6C8FC-60E1-4084-AF7B-4C8D58C6280A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C6C8FC-60E1-4084-AF7B-4C8D58C6280A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
