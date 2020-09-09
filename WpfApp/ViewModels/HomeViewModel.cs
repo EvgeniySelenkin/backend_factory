@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,16 +11,20 @@ using System.Windows.Input;
 using WpfApp.Data;
 using WpfApp.Helpers;
 using WpfApp.Models;
+using System.Text.Json;
 
 namespace WpfApp.ViewModels
 {
     public class HomeViewModel : INotifyPropertyChanged
     {
+        static readonly HttpClient client = new HttpClient();
+        public Unit SelectedUnit { get; set; }
         private readonly Repository repository;
 
         public HomeViewModel()
         {
             repository = new Repository();
+
         }
 
         private ObservableCollection<Unit> units = new ObservableCollection<Unit>();
@@ -41,14 +46,14 @@ namespace WpfApp.ViewModels
             set
             {
                 events = value;
-                OnPropertyChanged(nameof(Event));
+                OnPropertyChanged(nameof(Events));
             }
         }
 
         public ICommand ShowUnitsCommand => new RelayCommand(async ol => await ShowUnitsCommandExecuted());
 
         public ICommand BreakUiCommand => new RelayCommand(BreakUiExecuted);
-        public ICommand AddEventsCommand => new RelayCommand(AddEvents);
+        public ICommand AddEventsCommand => new RelayCommand(async ol => await AddEvents());
 
         private void BreakUiExecuted(object obj)
         {
@@ -61,9 +66,30 @@ namespace WpfApp.ViewModels
             Units = new ObservableCollection<Unit>(unitsDb);
         }
 
-        private void AddEvents(object obj)
+        private async Task AddEvents()
         {
-            MessageBox.Show(obj.ToString());
+            if(SelectedUnit!=null)
+            {
+               try
+               {
+                    var url = $"http://localhost:5001/api/unit/events/{SelectedUnit.Id}";
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    var eventsDb = JsonSerializer.Deserialize<List<Event>>(responseBody);
+                    Events = new ObservableCollection<Event>(eventsDb);
+                    
+               }
+               catch(Exception e)
+               {
+                   MessageBox.Show(e.ToString());
+               }
+               finally
+               {
+                   MessageBox.Show(Events.Count.ToString());
+               }
+                
+            }
         }
         
 

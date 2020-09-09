@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using System.Linq;
+using WebApi.Odt;
 
 namespace WebApi
 {
@@ -41,6 +43,12 @@ namespace WebApi
         {
             db.Update(unit);
             await db.SaveChangesAsync();
+        }
+
+        public async Task<IList<EventOdt>> UnitEvents(int unitId)
+        {
+            var events = await db.Event.Where(e => e.UnitId == unitId).Take(10).OrderBy(e => e.EventId).ToListAsync();
+            return events;
         }
     }
 }

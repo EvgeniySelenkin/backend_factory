@@ -26,10 +26,5 @@ namespace WpfApp.Views
         {
             
         }
-        private void List1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (List1.SelectedItem == null) return;
-            MessageBox.Show("0");
-        }
     }
 }

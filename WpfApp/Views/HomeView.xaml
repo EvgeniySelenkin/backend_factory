@@ -9,17 +9,12 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <ListView
-            ItemsSource="{Binding Units}" x:Name="List1">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding AddEventsCommand}"
-                                        CommandParameter="{Binding Path=SelectedItem}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
+            ItemsSource="{Binding Units}" x:Name="List1" SelectedItem="{Binding SelectedUnit}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn
@@ -31,8 +26,21 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <DockPanel Grid.Row="1" Margin="5">
+            <Button Command="{Binding ShowUnitsCommand}"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                    Content="Получить установки" Cursor="Hand" />
+            <!--<Button Command="{Binding BreakUiCommand}"
+                    Margin="20 0 0 0"
+                    HorizontalAlignment="Left"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                    Content="Плохая команда" />-->
+        </DockPanel>
         <ListView
-            ItemsSource="{Binding Event}" Grid.Row="1">
+            ItemsSource="{Binding Events}" Grid.Row="2">
             <ListView.View>
                 <GridView>
                     <GridViewColumn
@@ -71,18 +79,12 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <DockPanel Grid.Row="2" Margin="5">
-            <Button Command="{Binding ShowUnitsCommand}"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource MaterialDesignOutlinedButton}"
-                    Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
-                    Content="Получить данные" />
-            <Button Command="{Binding BreakUiCommand}"
-                    Margin="20 0 0 0"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource MaterialDesignOutlinedButton}"
-                    Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
-                    Content="Плохая команда" />
-        </DockPanel>
+        <Button Content="Получить события" 
+                Command="{Binding AddEventsCommand}"
+                Grid.Row="3"
+                HorizontalAlignment="Left"
+                Margin="5"
+                Style="{StaticResource MaterialDesignOutlinedButton}"
+                Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Cursor="Hand"/>
     </Grid>
 </UserControl>

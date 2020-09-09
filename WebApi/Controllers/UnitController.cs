@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WebApi.Odt;
 using System.Configuration;
+using System.Data;
 
 namespace WebApi.Controllers
 {
@@ -79,11 +80,14 @@ namespace WebApi.Controllers
                 NotFound();
             await repo.Update(unit);
         }
-        //изменение appsettings.json (передача массива в виде Json)
-        [HttpPost("api/units/track")]
-        public async void TrackedUnit(List<int> unitsId)
+
+        [HttpGet("api/unit/events/{unitId}")]
+        public async Task<IList<EventOdt>> GetEvents(int unitId)
         {
-            
+            var events = await repo.UnitEvents(unitId);
+            if (events == null)
+                NotFound();
+            return events;
         }
     }
 }
