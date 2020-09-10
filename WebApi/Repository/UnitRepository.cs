@@ -47,7 +47,7 @@ namespace WebApi
 
         public async Task<IList<EventOdt>> UnitEvents(int unitId)
         {
-            var events = await db.Event.Where(e => e.UnitId == unitId).Take(10).OrderBy(e => e.EventId).ToListAsync();
+            var events = await db.Event.Where(e => e.UnitId == unitId).Take(100).OrderBy(e => e.EventId).ToListAsync();
             return events;
         }
     }

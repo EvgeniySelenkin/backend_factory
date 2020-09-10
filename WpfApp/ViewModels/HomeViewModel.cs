@@ -12,6 +12,8 @@ using WpfApp.Data;
 using WpfApp.Helpers;
 using WpfApp.Models;
 using System.Text.Json;
+using System.Linq;
+using Newtonsoft.Json;
 
 namespace WpfApp.ViewModels
 {
@@ -76,7 +78,8 @@ namespace WpfApp.ViewModels
                     HttpResponseMessage response = await client.GetAsync(url);
                     response.EnsureSuccessStatusCode();
                     string responseBody = await response.Content.ReadAsStringAsync();
-                    var eventsDb = JsonSerializer.Deserialize<List<Event>>(responseBody);
+
+                    var eventsDb = JsonConvert.DeserializeObject<List<Event>>(responseBody); //JsonSerializer.Deserialize<IReadOnlyCollection<Event>>(responseBody);
                     Events = new ObservableCollection<Event>(eventsDb);
                     
                }
