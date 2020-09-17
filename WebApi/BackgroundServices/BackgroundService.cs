@@ -37,14 +37,15 @@ namespace WebApi
                 Random rnd = new Random();
                 foreach (var tank in tanks)
                 {
-                    tank.Volume = tank.Volume * rnd.Next(9, 11) / 10;
+                    tank.Volume = tank.Volume * rnd.Next(9, 12) / 10;
                     if (tank.Volume > tank.MaxVolume)
                     {
                         _logger.Info($"Превышение объема резервуара {tank.Name}.");
+                        tank.Volume = tank.MaxVolume;
                     }
                     else
                     {
-                        _logger.Info($"Объем резервуара {tank.Name} увеличился.");
+                        _logger.Info($"Объем резервуара {tank.Name} изменился.");
                         await repo.Update(tank);
                     }
                 }

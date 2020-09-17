@@ -43,5 +43,11 @@ namespace WebApi
             db.Update(factory);
             await db.SaveChangesAsync();
         }
+
+        public async Task<bool> FindId(int id)
+        {
+            var factory = await db.Factory.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id);
+            return factory != null;
+        }
     }
 }

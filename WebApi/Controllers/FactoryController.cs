@@ -69,11 +69,14 @@ namespace WebApi
         [HttpPut("api/factories")]
         public async Task UpdateFactory(Factory factory)
         {
-            var findFactory = await GetFactoryById(factory.Id);
-            if (findFactory == null)
+            if (await FindFactoryById(factory.Id))
                 NotFound();
             await repo.Update(factory);
         }
 
+        private async Task<bool> FindFactoryById(int id)
+        {
+            return await repo.FindId(id);
+        }
     }
 }

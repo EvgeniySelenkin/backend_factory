@@ -45,6 +45,12 @@ namespace WebApi
             await db.SaveChangesAsync();
         }
 
+        public async Task<bool> FindId(int id)
+        {
+            var unit = await db.Unit.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+            return unit != null;
+        }
+
         public async Task<IList<EventOdt>> UnitEvents(int unitId)
         {
             var events = await db.Event.Where(e => e.UnitId == unitId).Take(100).OrderBy(e => e.EventId).ToListAsync();

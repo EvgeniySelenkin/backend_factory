@@ -44,5 +44,10 @@ namespace WebApi
             await db.SaveChangesAsync();
         }
 
+        public async Task<bool> FindId(int id)
+        {
+            var tank = await db.Tank.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id);
+            return tank != null;
+        }
     }
 }

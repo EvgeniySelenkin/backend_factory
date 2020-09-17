@@ -75,10 +75,14 @@ namespace WebApi.Controllers
         [HttpPut("api/units")]
         public async Task UpdateUnit(Unit unit)
         {
-            var Unit = await GetUnitById(unit.Id);
-            if (Unit == null)
+            if (await FindUnitById(unit.Id))
                 NotFound();
             await repo.Update(unit);
+        }
+
+        private async Task<bool> FindUnitById(int id)
+        {
+            return await repo.FindId(id);
         }
 
         [HttpGet("api/unit/events/{unitId}")]
@@ -89,5 +93,19 @@ namespace WebApi.Controllers
                 NotFound();
             return events;
         }
+
+        /*
+        [HttpGet("api/unit/wpf")]
+        public async Task<IList<UnitListOdt>> GetUnitsForWPF()
+        {
+            var units = await repo.GetAll();
+            var ods = new List<UnitListOdt>();
+            foreach (var unit in units)
+            {
+                var odt = mapper.Map<UnitListOdt>(unit);
+                ods.Add(odt);
+            }
+            return ods;
+        }*/
     }
 }

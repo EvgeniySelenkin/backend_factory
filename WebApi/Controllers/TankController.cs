@@ -65,14 +65,16 @@ namespace WebApi.Controllers
         }
         [Authorize(Roles = "admin")]
         [HttpPut("api/tanks")]
-        public async Task UpdateFactory(Tank tank)
+        public async Task UpdateTank(Tank tank)
         {
-            var Tank = await GetTankById(tank.Id);
-            if (Tank == null)
+            if (await FindTankById(tank.Id))
                 NotFound();
             await repo.Update(tank);
         }
 
-
+        private async Task<bool> FindTankById(int id)
+        {
+            return await repo.FindId(id);
+        }
     }
 }
